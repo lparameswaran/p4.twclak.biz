@@ -12,7 +12,7 @@ var totalletters = 0;
 var final = false;
 var showlog = false;
 var timer;
-var timerseconds = 100; /* 5 minute timer */
+var timerseconds = 300; /* 5 minute timer */
 
 function myTimer()
 {
@@ -287,7 +287,7 @@ function reset(numwords) {
     totalwords = 0;
     totalletters = 0;
     final = false;
-    timerseconds = 100;
+    timerseconds = 300;
     var timedisp = "";
     var timemm = Math.floor(timerseconds / 60);
     var timess = Math.floor(timerseconds % 60);
