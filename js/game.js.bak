@@ -227,39 +227,6 @@ function submit(wsubmit, wclear) {
    }
 }
 
-var prevseconds = 0;
-var prevkey = " ";
-function keypressed(key, key1) {
-    var currentdate = new Date();
-    var currentsecs = currentdate.getSeconds();
-    if (prevseconds == currentsecs && prevkey == key) return;
-    prevseconds = currentsecs;
-    prevkey = key;
-    console.log("Key pressed:" + key + " " + key1);
-    if (key1 == 13) return submit(true, false);
-    if (key1 == 27) return submit(false, true);
-    if (key >= 'A' && key <= 'Z') {
-       var matchchar = false;
-       for (var i = 0;i < maxlength;i ++) {
-          if (playtiles[i].match("^" + key + "$")) {
-             matchchar = true;
-             for (var j = 0;j < maxlength;j ++) {
-                 if (gametiles[j].match("^ $")) break;
-             }
-             gametiles[j] = key;
-             break;
-          }
-       }
-       if (matchchar) {
-          for (var j = i;j < maxlength - 1;j ++) {
-             playtiles[j] = playtiles[j + 1];
-          }
-          playtiles[maxlength - 1] = " ";
-       }
-    }
-    redraw();
-}
-
 function gtile(pos) {
     if (pos >= maxlength) {
        if (showlog) console.log("gtile - pos:" + pos + " >= " + maxlength);
@@ -301,7 +268,6 @@ function ptile(pos) {
     redraw();
 }
 
-
 function reset(numwords) {
     // Clear old game history
     if (words) words.length = 0;
@@ -321,7 +287,7 @@ function reset(numwords) {
     totalwords = 0;
     totalletters = 0;
     final = false;
-    timerseconds = 300;
+    timerseconds = 20;
     var timedisp = "";
     var timemm = Math.floor(timerseconds / 60);
     var timess = Math.floor(timerseconds % 60);
@@ -356,15 +322,6 @@ function level(numwords) {
       if (showlog) console.log("Incorrect numwords=" + numwords + " for level()");
       return 1;
    }
-   document.addEventListener('keyup', function(event) {
-       var key = event.keyCode;
-       if (key >= 'a' && key <= 'z') key = key - 'a' + 'A';
-       var key1 = String.fromCharCode(key);
-       if ((key1 >= 'A' && key1 <= 'Z') || key == 13 || key == 27) {
-          console.log("pressed:" + key1);
-          keypressed(key1, key);
-       }
-   });
    $.post( "/game/getwords", { numwords: numwords, minwords: minwords }, function( dataout ) {
      if (showlog) console.log("result = " + dataout);
      var data = jQuery.parseJSON(dataout);
